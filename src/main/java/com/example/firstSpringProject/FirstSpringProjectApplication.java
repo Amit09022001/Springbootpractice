@@ -13,8 +13,6 @@ public class FirstSpringProjectApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(FirstSpringProjectApplication.class, args);
-        System.out.println("Hello How are you");
-        LOGGER.trace("this is  trace");
         LOGGER.info("this is first info");
 
     }
