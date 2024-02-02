@@ -49,4 +49,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return emp1;
     }
 
+    @Override
+    public Employee getEmployeeByName(String employeeName) {
+        return employeeRepository.findByEmpName(employeeName);
+    }
+
+
 }
