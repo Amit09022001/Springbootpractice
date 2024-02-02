@@ -16,7 +16,8 @@ import java.util.List;
 @RequestMapping("/employee")
 public class EmployeeController {
     public static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
-    private EmployeeRepository employeeRepository;
+    private  final EmployeeRepository employeeRepository;
+
     public EmployeeController(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
@@ -35,6 +36,7 @@ public class EmployeeController {
         LOGGER.info("Employee Details fetched from data base " + employeeList);
         return ResponseEntity.status(HttpStatus.OK).body(employeeList);
     }
+
     @PostMapping("/add")
     public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
         Employee employee1 = null;
@@ -51,18 +53,33 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeDetailsById(@PathVariable Integer id) {
+    public ResponseEntity<Employee> getEmployeeDetailsById(@PathVariable("id") Integer id) {
         Employee emp = employeeServiceImpl.getEmployeeById(id);
         return ResponseEntity.status(HttpStatus.OK).body(emp);
     }
+
     @PutMapping("/update/{empId}")
-    public ResponseEntity<Employee> updateEmployeeDetails(@RequestBody Employee employee ,@PathVariable("empId") int id){
-        try{
-            Employee emp=employeeServiceImpl.updateEmployee(employee,id);
-            LOGGER.info("Employee Details updated Sucessfully: "+emp.toString());
+    public ResponseEntity<Employee> updateEmployeeDetails(@RequestBody Employee employee, @PathVariable("empId") int id) {
+        try {
+            Employee emp = employeeServiceImpl.updateEmployee(employee, id);
+            LOGGER.info("Employee Details updated Sucessfully: " + emp.toString());
             return ResponseEntity.status(HttpStatus.OK).body(emp);
-        }catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<Employee> getEmployeeByEmployeeName(@RequestParam String empName)
+
+    {
+        try {
+
+            Employee employee = employeeServiceImpl.getEmployeeByName(empName);
+            return ResponseEntity.status(HttpStatus.OK).body(employee);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }
