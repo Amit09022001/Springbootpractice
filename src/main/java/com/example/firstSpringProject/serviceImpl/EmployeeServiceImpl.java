@@ -26,7 +26,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee getEmployeeById(int id) {
-        return employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
+        return employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Employee","id",id));
     }
 
     @Override
@@ -51,7 +51,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee getEmployeeByName(String employeeName) {
-        return employeeRepository.findByEmpName(employeeName);
+        if(employeeRepository.findByEmpName(employeeName)==null){
+            throw new EmployeeNotFoundException("Employee","employee name");
+        }
+        else
+            return employeeRepository.findByEmpName(employeeName);
     }
 
 

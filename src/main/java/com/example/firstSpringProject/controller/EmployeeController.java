@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/employee")
 public class EmployeeController {
     public static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
-    private  final EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
     public EmployeeController(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
@@ -70,16 +70,9 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<Employee> getEmployeeByEmployeeName(@RequestParam String empName)
+    public ResponseEntity<Employee> getEmployeeByEmployeeName(@RequestParam String empName) {
+        Employee employee = employeeServiceImpl.getEmployeeByName(empName);
+        return ResponseEntity.status(HttpStatus.OK).body(employee);
 
-    {
-        try {
-
-            Employee employee = employeeServiceImpl.getEmployeeByName(empName);
-            return ResponseEntity.status(HttpStatus.OK).body(employee);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 }

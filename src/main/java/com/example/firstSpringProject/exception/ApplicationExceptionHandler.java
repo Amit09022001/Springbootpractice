@@ -1,15 +1,25 @@
 package com.example.firstSpringProject.exception;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
-@ControllerAdvice
-@ResponseBody
-@ResponseStatus(HttpStatus.NOT_FOUND)
+import java.util.Date;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
+@RestControllerAdvice
+@ResponseStatus(NOT_FOUND)
+@Data
+@AllArgsConstructor
+
 public class ApplicationExceptionHandler {
-    String employeeNotFoundHandler(EmployeeNotFoundException ex){
-        return ex.getMessage();
+    @ExceptionHandler(EmployeeNotFoundException.class)
+     ResponseEntity<ErrorDetails> employeeNotFoundHandler(EmployeeNotFoundException ex, WebRequest webRequest) {
+        ErrorDetails errorDetails=new ErrorDetails(new Date(),ex.getMessage(),webRequest.getDescription(false));
+        return  new ResponseEntity<>(errorDetails, NOT_FOUND);
     }
 }
